@@ -1,0 +1,13 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:WrongThemeDictionary">
+    <!-- ToolBar's class initializer eventually calls Application.Current.Resources during system resource parsing -->
+    <Style x:Key="{x:Type ToolBar}" BasedOn="{StaticResource {x:Type ToolBar}}" />
+
+    <!-- The style that's going to be mistaken as a theme style. WPF will skip theme style field initialization because of it. -->
+    <Style x:Key="{x:Type local:CustomControl}" TargetType="{x:Type local:CustomControl}">
+        <!-- The setter value needs to be a markup extension for it to do a theme style lookup when this style is replaced, -->
+        <!-- which will cause NRE because the theme style field initialization is skipped -->
+        <Setter Property="ToolTip" Value="{Binding Name, RelativeSource={RelativeSource Self}}" />
+    </Style>
+</ResourceDictionary>
